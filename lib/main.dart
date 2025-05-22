@@ -65,7 +65,7 @@ class _TrafficBotPageState extends State<TrafficBotPage> {
 
       var response = await request.send();
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200) {   
         final body = await response.stream.bytesToString();
         final jsonResp = jsonDecode(body);
         taskId = jsonResp['task_id'];
@@ -85,15 +85,7 @@ class _TrafficBotPageState extends State<TrafficBotPage> {
     }
   }
 
-  Future<String> downloadVideo(String videoUrl) async {
-    final response = await http.get(Uri.parse(videoUrl));
-    final directory = await getApplicationDocumentsDirectory();
-    final filePath = '${directory.path}/downloaded_video.mp4';
-    print(filePath);
-    final file = File(filePath);
-    await file.writeAsBytes(response.bodyBytes);
-    return filePath;
-  }
+ 
 
   Future<void> pollForResult(String taskId) async {
     while (true) {
@@ -118,7 +110,6 @@ class _TrafficBotPageState extends State<TrafficBotPage> {
               });
               _videoController?.play(); // auto-play
             });
-          await downloadVideo(videoUrl);
 
           _showSnackBar("Video processed. You can now ask questions.");
           break;
